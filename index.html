@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#020509"><title>JARVIS V4</title>
+<style>
+:root{--c:#39e7ff;--bg:#010408}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:#c8f8ff;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+body{background:radial-gradient(circle at 50% 47%,#082a35 0,#031018 23%,#010509 60%,#000 100%)}#app{height:100dvh;position:relative}.scan{position:absolute;inset:0;pointer-events:none;background:linear-gradient(rgba(57,231,255,.025) 1px,transparent 1px);background-size:100% 5px}
+.top{position:absolute;z-index:5;top:max(12px,env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between}.badge{font-size:9px;letter-spacing:1.2px;border:1px solid #164e5c;background:#031018e8;padding:7px 9px}.ok{color:#62ffb0}
+.clock{position:absolute;z-index:5;top:8px;left:50%;transform:translateX(-50%);text-align:center;border:1px solid #164e5c;background:#031018e8;padding:6px 16px;min-width:150px}.label{font-size:6px;color:#55aaba;letter-spacing:1.5px}.time{font-size:18px;letter-spacing:3px}
+.side{position:absolute;z-index:5;left:9px;top:78px;width:min(185px,39vw)}.menu{font-size:8px;color:var(--c);letter-spacing:1px;margin:8px 0}.item{font-size:7px;padding:8px;border:1px solid #123d49;background:#03131a9c;margin:5px 0}.item.on{border-color:#38e5ff;box-shadow:0 0 12px #38e5ff33}
+.core{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);width:min(69vw,420px);aspect-ratio:1;display:grid;place-items:center}.orbit,.orbit2{position:absolute;border-radius:50%;border:1px solid #38e5ff33}.orbit{inset:3%;animation:spin 20s linear infinite}.orbit2{inset:12%;border-style:dashed;animation:spin2 13s linear infinite}.orbit:after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:#c9fbff;box-shadow:0 0 15px 5px #38e5ff;left:50%;top:-3px}
+.brain{position:absolute;width:73%;height:73%;border-radius:48% 52% 45% 55%;background:radial-gradient(circle,#38e5ff18 0,transparent 68%);box-shadow:0 0 60px #38e5ff20 inset;transition:.25s}.brain.active{animation:pulse .7s ease-in-out infinite alternate;box-shadow:0 0 80px #38e5ff42 inset,0 0 55px #38e5ff2c}
+.node{position:absolute;width:3px;height:3px;background:#e0fdff;border-radius:50%;box-shadow:0 0 7px 2px #38e5ff}
+.status{position:absolute;z-index:5;left:50%;bottom:112px;transform:translateX(-50%);font-size:8px;letter-spacing:1.5px;color:#55aaba;text-align:center;white-space:nowrap}.heard{position:absolute;z-index:5;left:50%;bottom:83px;transform:translateX(-50%);font-size:9px;max-width:76vw;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.controls{position:absolute;z-index:10;bottom:max(18px,calc(14px + env(safe-area-inset-bottom)));left:50%;transform:translateX(-50%);display:flex;gap:12px}button{width:48px;height:48px;border-radius:50%;border:1px solid #2a7180;background:#03151c;color:#c8f8ff;font:inherit;box-shadow:0 0 18px #38e5ff14}#mic{width:66px;height:66px;font-size:22px;border-color:#38e5ff99}#mic.active{background:#38e5ff20;box-shadow:0 0 35px #38e5ff55;animation:pulse .7s infinite alternate}
+.panel{position:absolute;z-index:20;right:12px;bottom:90px;width:min(330px,calc(100vw - 24px));background:#031018f7;border:1px solid #38e5ff55;padding:14px;display:none;box-shadow:0 0 35px #000}.panel.show{display:block}.panel h2{font-size:12px;color:#38e5ff;margin:0 0 8px}.panel input,.panel textarea{width:100%;margin:5px 0;background:#01070a;border:1px solid #164e5c;color:#c8f8ff;padding:9px;font:10px ui-monospace}.panel textarea{height:70px;resize:none}.panel small{font-size:8px;color:#78aeb8;line-height:1.4}.panel .save{width:auto;height:34px;border-radius:6px;margin-top:7px;padding:0 12px}
+.log{position:absolute;z-index:4;right:10px;top:78px;width:min(220px,30vw);max-height:260px;overflow:hidden;font-size:7px;color:#4e99a6;text-align:right}.log div{margin:5px 0}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes spin2{to{transform:rotate(-360deg)}}@keyframes pulse{to{transform:scale(1.06)}}@media(max-width:700px){.side{width:132px}.item{padding:6px 5px}.log{display:none}.core{width:78vw}.clock{min-width:140px}.top .badge:first-child{display:none}}
+</style>
+</head>
+<body><div id="app"><div class="scan"></div>
+<div class="top"><div class="badge">J.A.R.V.I.S. // V4</div><div class="badge ok">● NEURAL LINK READY</div></div>
+<div class="clock"><div class="label">LOCAL TIME</div><div id="time" class="time">00:00:00</div><div class="label">AI CORE // READY</div></div>
+<aside class="side"><div class="menu">◈ CONTROL // JARVIS</div><div class="item on">◉ NEURAL CORE</div><div class="item">◉ VISION</div><div class="menu">AI MODULES</div><div class="item on">◉ CONVERSATION</div><div class="item">◉ MEMORY</div><div class="item">◉ WEB // READY</div><div class="item" id="settingsBtn">⚙ AI SETTINGS</div></aside>
+<main class="core"><div class="orbit"></div><div class="orbit2"></div><div class="brain" id="brain"></div></main>
+<div id="status" class="status">STANDBY // TAP TO SPEAK</div><div id="heard" class="heard"></div><div id="log" class="log"></div>
+<div class="controls"><button id="stop">■</button><button id="mic">◉</button><button id="settings">⚙</button></div>
+<div class="panel" id="panel"><h2>AI CORE CONFIG</h2>
+<small>Per collegare un vero modello AI, inserisci un endpoint compatibile con la tua infrastruttura. Non inserire una chiave API in una pagina pubblica: la V4 è predisposta per un backend/proxy sicuro.</small>
+<input id="endpoint" placeholder="https://tuo-server.example/api/jarvis">
+<input id="model" placeholder="modello (opzionale)">
+<textarea id="prompt" placeholder="Personalità di JARVIS"></textarea>
+<button class="save" id="save">SALVA</button></div>
+</div>
+<script>
+const brain=document.getElementById('brain'),status=document.getElementById('status'),heard=document.getElementById('heard'),log=document.getElementById('log');
+for(let i=0;i<115;i++){let n=document.createElement('span');n.className='node';let a=Math.random()*6.283,r=Math.sqrt(Math.random())*43;n.style.left=(50+Math.cos(a)*r)+'%';n.style.top=(50+Math.sin(a)*r*.75)+'%';brain.appendChild(n)}
+const time=()=>document.getElementById('time').textContent=new Date().toLocaleTimeString('it-IT',{hour12:false});time();setInterval(time,1000);
+let cfg=JSON.parse(localStorage.getItem('jarvisV4')||'{}');document.getElementById('endpoint').value=cfg.endpoint||'';document.getElementById('model').value=cfg.model||'';document.getElementById('prompt').value=cfg.prompt||'Sei JARVIS, assistente personale in italiano. Rispondi in modo chiaro, breve e professionale.';
+function addLog(t){let d=document.createElement('div');d.textContent='› '+t;log.prepend(d);while(log.children.length>5)log.lastChild.remove()}
+function speak(t){if(!('speechSynthesis'in window))return;speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='it-IT';u.rate=.96;u.pitch=.9;u.onstart=()=>{brain.classList.add('active');status.textContent='JARVIS // SPEAKING'};u.onend=()=>{brain.classList.remove('active');status.textContent='STANDBY // READY'};speechSynthesis.speak(u)}
+async function askAI(text){
+ if(!cfg.endpoint){let x=text.toLowerCase();let r=x.includes('ore')?'Sono le '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})+'.':x.includes('chi sei')?'Sono JARVIS, il tuo assistente mobile.':'Ricevuto. Il collegamento al cervello AI non è ancora configurato.';speak(r);return}
+ status.textContent='JARVIS // THINKING';addLog('AI request');brain.classList.add('active');
+ try{let res=await fetch(cfg.endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,model:cfg.model||undefined,system:cfg.prompt||undefined})});if(!res.ok)throw new Error('HTTP '+res.status);let data=await res.json();let out=data.output_text||data.content||data.response||data.message||JSON.stringify(data);speak(out);addLog('AI response')}
+ catch(e){brain.classList.remove('active');status.textContent='AI LINK ERROR';addLog(String(e));speak('Il collegamento al cervello AI non risponde. Controlla la configurazione.')}
+}
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec;
+function listen(){if(!SR){speak('Il riconoscimento vocale non è disponibile in questo browser.');return}rec=new SR();rec.lang='it-IT';rec.interimResults=false;rec.continuous=false;rec.onstart=()=>{brain.classList.add('active');status.textContent='LISTENING // PARLA ORA';heard.textContent='';document.getElementById('mic').classList.add('active')};rec.onresult=e=>{let t=e.results[0][0].transcript;heard.textContent='“'+t+'”';addLog(t);askAI(t)};rec.onerror=e=>{status.textContent='VOICE ERROR';addLog(e.error)};rec.onend=()=>{document.getElementById('mic').classList.remove('active');if(status.textContent.startsWith('LISTENING')){brain.classList.remove('active');status.textContent='STANDBY // READY'}};rec.start()}
+document.getElementById('mic').onclick=listen;document.getElementById('stop').onclick=()=>{try{rec&&rec.stop()}catch(e){}speechSynthesis.cancel();brain.classList.remove('active');document.getElementById('mic').classList.remove('active');status.textContent='SYSTEM STANDBY'};
+const panel=document.getElementById('panel');document.getElementById('settings').onclick=()=>panel.classList.toggle('show');document.getElementById('settingsBtn').onclick=()=>panel.classList.add('show');
+document.getElementById('save').onclick=()=>{cfg={endpoint:document.getElementById('endpoint').value.trim(),model:document.getElementById('model').value.trim(),prompt:document.getElementById('prompt').value.trim()};localStorage.setItem('jarvisV4',JSON.stringify(cfg));panel.classList.remove('show');status.textContent='CONFIG SAVED // READY';addLog('AI configuration saved')};
+</script></body></html>
